@@ -1,0 +1,23 @@
+.Button {
+  position: absolute;
+  background: var(--red);
+  border-radius: 4px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: var(--white);
+  border: 1px solid var(--red);
+}
+.Button--small {
+  padding: 6px 25px;
+}
+.Button--large {
+  padding: 10px 30px;
+}
+
+.Button--outline {
+  background: transparent;
+}

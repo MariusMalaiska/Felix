@@ -1,0 +1,53 @@
+// .Movies {
+//   width: 270px;
+//   height: 370px;
+// }
+.Movie {
+  width: 270px;
+  height: 370px;
+  margin: 48px 0px 48px 0px;
+}
+.Movie-Image {
+  height: 202px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: -60px;
+}
+
+.Movie-Info {
+  box-sizing: border-box;
+  padding: 10px 20px;
+  height: 168px;
+  width: 270px;
+  color: var(--white);
+  background-color: var(--gray);
+
+  //   .Title {
+  //     font-size: 24px;
+  //     line-height: 28px;
+  //   }
+
+  .module {
+    width: 100%;
+    margin: 0 0 1em 0;
+    overflow: hidden;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    line-height: 19px;
+  }
+  .module p {
+    margin: 0;
+  }
+
+  .line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  //   p {
+  //     font-size: 16px;
+  //     line-height: 19px;
+  //   }
+}
