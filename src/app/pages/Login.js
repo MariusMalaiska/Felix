@@ -10,41 +10,37 @@ class Login extends React.Component {
       password: ""
     };
   }
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
 
-  // handleSubmit = event => {
-  //   event.preventDefault();
-  //   console.log(this.state.username);
-  //   console.log(this.state.password);
-  // };
-  handleSubmit = async event => {
+  login = async event => {
     event.preventDefault();
-    // console.log(this.state.name);
-    try {
-      await fetch(`https://academy-video-api.herokuapp.com/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ username: `tester`, password: `netflix` })
-      }).then(response => {
+
+    fetch(`https://academy-video-api.herokuapp.com/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password
+      })
+    })
+      .then(response => {
         if (!response.ok) {
           throw response;
         }
-        console.log(response.json());
         return response.json();
+      })
+      .then(json => {
+        localStorage.setItem("token", json.token);
+        console.log(json.token);
       });
-    } catch (e) {
-      console.log(await e);
-    }
   };
 
   render() {
     return (
       <div className="SignIn">
         <div className="SignIn-box">
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.login}>
             <label className="Label" htmlFor="userName">
               Username
             </label>
@@ -63,7 +59,7 @@ class Login extends React.Component {
               className="Input Password"
               autoComplete="current-password"
               type="password"
-              onChange={e => this.setPassword(e.target.value)}
+              onChange={e => this.setState({ password: e.target.value })}
               id="pasword"
               name="password"
             />

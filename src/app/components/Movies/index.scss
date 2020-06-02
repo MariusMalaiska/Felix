@@ -4,11 +4,11 @@
 // }
 .Movie {
   width: 270px;
-  height: 370px;
+  min-height: 370px;
   margin: 48px 0px 48px 0px;
 }
 .Movie-Image {
-  height: 202px;
+  min-height: 202px;
   width: 100%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -18,7 +18,7 @@
 .Movie-Info {
   box-sizing: border-box;
   padding: 10px 20px;
-  height: 168px;
+  min-height: 168px;
   width: 270px;
   color: var(--white);
   background-color: var(--gray);

@@ -9,6 +9,7 @@ import Button from "./components/Button";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Content from "./pages/Content";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 class App extends Component {
@@ -55,15 +56,23 @@ class App extends Component {
         <div className="App">
           <div className="Container">
             <header className="App-header">
-              <Link to="/">
-                <img className="Logo" alt="felix logo" src={logo}></img>
-              </Link>
+              <ul>
+                <li>
+                  <Link to="/">
+                    <img className="Logo" alt="felix logo" src={logo}></img>
+                  </Link>
+                </li>
+                <li>
+                  <Button to="/login" size="small">
+                    Sign in
+                  </Button>
+                </li>
+              </ul>
+
               {/* <Link className="Button" to="/login">
                 Sign in
               </Link> */}
-              <Button to="/login" size="small">
-                Sign in
-              </Button>
+
               {/* <Button size="small" type="submit"> */}
               {/* </Button> */}
             </header>
@@ -74,6 +83,9 @@ class App extends Component {
               </Route>
               <Route exact path="/login" Component={Login}>
                 <Login />
+              </Route>
+              <Route exact path="/content" Component={Content}>
+                <Content />
               </Route>
             </Switch>
 

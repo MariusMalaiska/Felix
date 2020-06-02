@@ -1,9 +1,8 @@
 import React from "react";
-import Button from "../components/Button";
 import "../index.css";
 import Movie from "../components/Movies";
 
-class Home extends React.Component {
+class Content extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,8 +23,11 @@ class Home extends React.Component {
   };
 
   componentDidMount = async () => {
-    fetch(`https://academy-video-api.herokuapp.com/content/free-items`, {
-      method: "GET"
+    fetch(`https://academy-video-api.herokuapp.com/content/items`, {
+      method: "GET",
+      headers: {
+        authorization: localStorage.getItem("token")
+      }
     })
       .then(res => res.json())
       .then(json => {
@@ -39,15 +41,9 @@ class Home extends React.Component {
 
   render() {
     const { isLoaded, items } = this.state;
+
     return (
       <React.Fragment>
-        <div className="Hero">
-          <h1>Wanna more Content ?</h1>
-          <div>
-            <Button size="large">Get Access</Button>
-          </div>
-        </div>
-        <div className="Gray-line" />
         <div className="Movies">
           {!isLoaded ? (
             <h4 style={{ color: "white" }}> loading...</h4>
@@ -65,13 +61,9 @@ class Home extends React.Component {
             ))
           )}
         </div>
-        <div className="Content-btn">
-          <Button size="large">Get More Content</Button>
-          );
-        </div>
       </React.Fragment>
     );
   }
 }
 
-export default Home;
+export default Content;
