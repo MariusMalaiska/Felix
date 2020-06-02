@@ -10,6 +10,7 @@ import Button from "./components/Button";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Content from "./pages/Content";
+import PrivateRoute from "./components/PrivateRoute";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 class App extends Component {
@@ -84,9 +85,9 @@ class App extends Component {
               <Route exact path="/login" Component={Login}>
                 <Login />
               </Route>
-              <Route exact path="/content" Component={Content}>
+              <PrivateRoute exact path="/content" Component={Content}>
                 <Content />
-              </Route>
+              </PrivateRoute>
             </Switch>
 
             {/* <div className="Hero">

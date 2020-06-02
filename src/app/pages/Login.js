@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "../components/Button";
 import "../index.css";
+import { withRouter } from "react-router-dom";
 
 class Login extends React.Component {
   constructor(props) {
@@ -32,7 +33,8 @@ class Login extends React.Component {
       })
       .then(json => {
         localStorage.setItem("token", json.token);
-        console.log(json.token);
+        this.props.history.replace("/content");
+        // console.log(json.token);
       });
   };
 
@@ -73,4 +75,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
