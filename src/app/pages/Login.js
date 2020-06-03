@@ -12,6 +12,8 @@ class Login extends React.Component {
     };
   }
 
+  // (localStorage.token) ?    this.props.history.replace("/content"): console.log("token found");
+
   login = async event => {
     event.preventDefault();
 

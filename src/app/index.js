@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./index.css";
 import logo from "./styles/images/F.svg";
 import card from "./styles/images/credit-card.svg";
@@ -11,17 +11,22 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Content from "./pages/Content";
 import PrivateRoute from "./components/PrivateRoute";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, withRouter } from "react-router-dom";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [],
-      favorites: [],
-      isLoaded: false
-    };
-  }
+// class App extends Component {
+const App = props => {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     items: [],
+  //     favorites: [],
+  //     isLoaded: false
+  //     // isLoggedIn: false
+  //   };
+  // }
+  const [items, setItems] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // changeButton = id => {
   //   let { favorites } = this.state;
@@ -32,6 +37,28 @@ class App extends Component {
   //     this.setState({ favorites: favorites.concat(id) });
   //   }
   // };
+  // logout = () => {
+  const logout = useCallback(() => {
+    fetch("https://academy-video-api.herokuapp.com/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+        // authorization: localStorage.getItem("token")
+      },
+      body: JSON.stringify({ token: localStorage.getItem("token") })
+    }).then(response => {
+      if (!response.ok) {
+        throw response;
+      }
+      console.log(response);
+      localStorage.clear();
+      props.history.replace("/");
+    });
+    // .then(response => {
+    //   console.log(response);
+    //   localStorage.clear();
+    // });
+  });
 
   // componentDidMount = async () => {
   //   try {
@@ -49,48 +76,54 @@ class App extends Component {
   //   }
   // };
 
-  render() {
-    // const { isLoaded, items } = this.state;
+  // render() {
+  // const { isLoaded, items } = this.state;
 
-    return (
-      <Router>
-        <div className="App">
-          <div className="Container">
-            <header className="App-header">
-              <ul>
-                <li>
-                  <Link to="/">
-                    <img className="Logo" alt="felix logo" src={logo}></img>
-                  </Link>
-                </li>
-                <li>
-                  <Button to="/login" size="small">
-                    Sign in
-                  </Button>
-                </li>
-              </ul>
+  return (
+    <div className="App">
+      <div className="Container">
+        <header className="App-header">
+          <ul>
+            <li>
+              <Link to="/">
+                <img className="Logo" alt="felix logo" src={logo}></img>
+              </Link>
+            </li>
+            <li>
+              {localStorage.token === undefined ? (
+                <Button to="/login" size="small">
+                  Sign in
+                </Button>
+              ) : (
+                // <Button onClick={this.logout} size="small">
+                <Button onClick={logout} size="small">
+                  Logout
+                </Button>
+              )}
+            </li>
+          </ul>
 
-              {/* <Link className="Button" to="/login">
+          {/* <Link className="Button" to="/login">
                 Sign in
               </Link> */}
 
-              {/* <Button size="small" type="submit"> */}
-              {/* </Button> */}
-            </header>
+          {/* <Button size="small" type="submit"> */}
+          {/* </Button> */}
+        </header>
 
-            <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route exact path="/login" Component={Login}>
-                <Login />
-              </Route>
-              <PrivateRoute exact path="/content" Component={Content}>
-                <Content />
-              </PrivateRoute>
-            </Switch>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route exact path="/login" Component={Login}>
+            <Login />
+          </Route>
+          <PrivateRoute exact path="/content" Component={Content}>
+            <Content />
+          </PrivateRoute>
+        </Switch>
 
-            {/* <div className="Hero">
+        {/* <div className="Hero">
               <h1>Wanna more Content ?</h1>
               <Button size="large">Get Access</Button>
             </div>
@@ -117,23 +150,18 @@ class App extends Component {
               );
             </div> */}
 
-            <footer className="Footer">
-              <p className="Copyright">
-                We care about your entertainment. Copyright © 2019–2020
-                felix.com
-              </p>
-              <div className="Cards">
-                <ul>
-                  <li>
-                    <a href="www.visa.com">
-                      <img
-                        className="Card"
-                        alt="Visa card logo"
-                        src={card}
-                      ></img>
-                    </a>
-                  </li>
-                  {/* <li>
+        <footer className="Footer">
+          <p className="Copyright">
+            We care about your entertainment. Copyright © 2019–2020 felix.com
+          </p>
+          <div className="Cards">
+            <ul>
+              <li>
+                <a href="www.visa.com">
+                  <img className="Card" alt="Visa card logo" src={card}></img>
+                </a>
+              </li>
+              {/* <li>
                   <a href="www.visa.com">
                     <img className="Card" alt="Visa card logo" src={card}></img>
                   </a>
@@ -148,15 +176,14 @@ class App extends Component {
                     <img className="Card" alt="Visa card logo" src={card}></img>
                   </a>
                 </li> */}
-                </ul>
-              </div>
-            </footer>
+            </ul>
           </div>
-        </div>
-      </Router>
-    );
-  }
-}
+        </footer>
+      </div>
+    </div>
+  );
+  // }
+};
 
 // function Home() {
 //   return <h2>Home</h2>;
@@ -188,4 +215,4 @@ class App extends Component {
 // function Home() {
 //   return <h2>Login</h2>;
 // }
-export default App;
+export default withRouter(App);
