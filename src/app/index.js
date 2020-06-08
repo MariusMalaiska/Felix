@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import "./index.css";
 import logo from "./styles/images/F.svg";
 import card from "./styles/images/credit-card.svg";
@@ -24,10 +24,11 @@ const App = props => {
   //     // isLoggedIn: false
   //   };
   // }
-  const [items, setItems] = useState([]);
+  //-------------is assigned a value but never used   ------
+  // const [items, setItems] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
+  // const [isLoaded, setIsLoaded] = useState(false);
+  //---------------------------------------------------------
   // changeButton = id => {
   //   let { favorites } = this.state;
   //   console.log(id);
@@ -58,7 +59,7 @@ const App = props => {
     //   console.log(response);
     //   localStorage.clear();
     // });
-  });
+  }, [props.history]);
 
   // componentDidMount = async () => {
   //   try {
@@ -113,13 +114,13 @@ const App = props => {
 
         <Switch>
           <Route exact path="/">
-            <Home />
+            <Home favorites={favorites} setFavorites={setFavorites} />
           </Route>
           <Route exact path="/login" Component={Login}>
             <Login />
           </Route>
           <PrivateRoute exact path="/content" Component={Content}>
-            <Content />
+            <Content favorites={favorites} setFavorites={setFavorites} />
           </PrivateRoute>
         </Switch>
 
