@@ -2,60 +2,47 @@ import React, { useState, useCallback } from "react";
 import Button from "../components/Button";
 import "../index.css";
 import { withRouter } from "react-router-dom";
-
-// class Login extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       username: "",
-//       password: ""
-//     };
-//   }
+import { connect } from "react-redux";
 
 const Login = props => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  // const [token, setToken] = useState("");
 
-  // (localStorage.token) ?    this.props.history.replace("/content"): console.log("token found");
-
-  // login = async event => {
   const login = useCallback(
-    event => {
+    async event => {
       event.preventDefault();
-
-      fetch(`https://academy-video-api.herokuapp.com/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          // username: this.state.username,
-          // password: this.state.password
-          username: username,
-          password: password
-        })
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw response;
+      try {
+        const result = await fetch(
+          `https://academy-video-api.herokuapp.com/auth/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              username: username,
+              password: password
+            })
           }
-          return response.json();
-        })
-        .then(json => {
-          localStorage.setItem("token", json.token);
-          // this.props.history.replace("/content");
-          props.history.replace("/content");
-          // console.log(json.token);
-        });
+        );
+        if (!result.ok) {
+          throw result.json();
+        }
+        const json = await result.json();
+        localStorage.setItem("token", json.token);
+        props.setToken(json.token);
+        await props.history.replace("/content");
+      } catch {
+        console.log("wrong email or password");
+      }
     },
-    [username, password, props.history]
+    [username, password, props]
   );
 
-  // render() {
   return (
     <div className="SignIn">
       <div className="SignIn-box">
-        {/* <form onSubmit={this.login}> */}
         <form onSubmit={login}>
           <label className="Label" htmlFor="userName">
             Username
@@ -87,6 +74,8 @@ const Login = props => {
     </div>
   );
 };
-// }
 
-export default withRouter(Login);
+function mapDispatchToProps(dispatch) {
+  return { setToken: token => dispatch({ type: "SET_TOKEN", token }) };
+}
+export default connect(null, mapDispatchToProps)(withRouter(Login));

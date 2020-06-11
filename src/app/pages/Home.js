@@ -3,45 +3,22 @@ import Button from "../components/Button";
 import "../index.css";
 import Movie from "../components/Movies";
 
-// class Home extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       items: [],
-//       favorites: [],
-//       isLoaded: false
-//     };
-//   }
 const Home = ({ favorites, setFavorites }) => {
   const [items, setItems] = useState([]);
-  // const [favorites, setFavorites] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // changeButton = id => {
-  //   let { favorites } = this.state;
-  //   console.log(id);
-  //   if (favorites.includes(id)) {
-  //     this.setState({ favorites: favorites.filter(el => el !== id) });
-  //   } else {
-  //     this.setState({ favorites: favorites.concat(id) });
-  //   }
-  // };
-  const changeButton = useCallback(
-    id => {
-      // let { favorites } = this.state;
-      console.log(id);
-      if (favorites.includes(id)) {
-        // this.setState({ favorites: favorites.filter(el => el !== id) });
-        setFavorites(favorites.filter(el => el !== id));
-      } else {
-        // this.setState({ favorites: favorites.concat(id) });
-        setFavorites(favorites.concat(id));
-      }
-    },
-    [favorites, setFavorites]
-  );
+  // const changeButton = useCallback(
+  //   id => {
+  //     console.log(id);
+  //     if (favorites.includes(id)) {
+  //       setFavorites(favorites.filter(el => el !== id));
+  //     } else {
+  //       setFavorites(favorites.concat(id));
+  //     }
+  //   },
+  //   [favorites, setFavorites]
+  // );
 
-  // componentDidMount = async () => {
   const freeItems = useCallback(
     async e => {
       const res = await fetch(
@@ -50,14 +27,7 @@ const Home = ({ favorites, setFavorites }) => {
           method: "GET"
         }
       );
-      // .then(res => res.json())
-      // .then(json => {
-      //   this.setState({
-      //     isLoaded: true,
-      //     items: json,
-      //     button: false
-      //   });
-      // });
+
       if (res.ok) {
         setItems(await res.json());
       }
@@ -70,8 +40,6 @@ const Home = ({ favorites, setFavorites }) => {
     freeItems();
   }, [freeItems]);
 
-  // render() {
-  // const { isLoaded, items } = this.state;
   return (
     <React.Fragment>
       <div className="Hero">
@@ -90,8 +58,10 @@ const Home = ({ favorites, setFavorites }) => {
               title={item.title}
               key={item.id}
               img={item.image}
+              id={item.id}
               isfavorite={favorites.includes(item.id)}
-              onClick={() => changeButton(item.id)}
+              // onClick={() => changeButton(item.id)}
+              openMovie={item.id}
             >
               {item.description}
             </Movie>
@@ -105,6 +75,5 @@ const Home = ({ favorites, setFavorites }) => {
     </React.Fragment>
   );
 };
-// }
 
 export default Home;

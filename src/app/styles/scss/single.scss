@@ -1,0 +1,27 @@
+.Single {
+  display: flex;
+  box-sizing: border-box;
+  padding: 55px;
+  max-width: 1120px;
+  width: 100%;
+  justify-content: space-between;
+  .Single-Image {
+    min-height: 392px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-y: -60px;
+  }
+  .Single-Info {
+    box-sizing: border-box;
+    padding: 0px 26px;
+    h2 {
+      margin-top: 0;
+    }
+    .Buttons-Info {
+      display: flex;
+      justify-content: space-between;
+      width: 300px;
+    }
+  }
+}
