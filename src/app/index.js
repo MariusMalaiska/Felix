@@ -7,8 +7,7 @@ import "./styles/scss/styles.scss";
 import logo from "./styles/images/F.svg";
 import card from "./styles/images/credit-card.svg";
 // -----------------------------React-redux/ state ----------------------------------
-import store from "./state";
-import { Provider, connect } from "react-redux";
+import { connect } from "react-redux";
 // -----------------------------Components import ----------------------------------
 import Button from "./components/Button";
 import PrivateRoute from "./components/PrivateRoute";
@@ -38,6 +37,7 @@ const App = props => {
       }
       console.log(result);
       localStorage.clear();
+      props.setToken("");
       props.history.replace("/");
     } catch {
       console.log("woops somthin went wrong on logout");
@@ -45,62 +45,60 @@ const App = props => {
   }, [props.history]);
 
   return (
-    <Provider store={store}>
-      <div className="App">
-        <div className="Container">
-          <header className="App-header">
+    <div className="App">
+      <div className="Container">
+        <header className="App-header">
+          <ul>
+            <li>
+              <Link to="/">
+                <img className="Logo" alt="felix logo" src={logo}></img>
+              </Link>
+            </li>
+            <li>
+              {localStorage.token === undefined ? (
+                <Button to="/login" size="small">
+                  Sign in
+                </Button>
+              ) : (
+                <Button onClick={logout} size="small">
+                  Logout
+                </Button>
+              )}
+            </li>
+          </ul>
+        </header>
+
+        <Switch>
+          <Route exact path="/">
+            <Home favorites={favorites} setFavorites={setFavorites} />
+          </Route>
+          <Route exact path="/login" Component={Login}>
+            <Login />
+          </Route>
+          <PrivateRoute exact path="/content" Component={Content}>
+            <Content favorites={favorites} setFavorites={setFavorites} />
+          </PrivateRoute>
+          <Route exact path="/content/:id">
+            <Single />
+          </Route>
+        </Switch>
+
+        <footer className="Footer">
+          <p className="Copyright">
+            We care about your entertainment. Copyright © 2019–2020 felix.com
+          </p>
+          <div className="Cards">
             <ul>
               <li>
-                <Link to="/">
-                  <img className="Logo" alt="felix logo" src={logo}></img>
-                </Link>
-              </li>
-              <li>
-                {localStorage.token === undefined ? (
-                  <Button to="/login" size="small">
-                    Sign in
-                  </Button>
-                ) : (
-                  <Button onClick={logout} size="small">
-                    Logout
-                  </Button>
-                )}
+                <a href="www.visa.com">
+                  <img className="Card" alt="Visa card logo" src={card}></img>
+                </a>
               </li>
             </ul>
-          </header>
-
-          <Switch>
-            <Route exact path="/">
-              <Home favorites={favorites} setFavorites={setFavorites} />
-            </Route>
-            <Route exact path="/login" Component={Login}>
-              <Login />
-            </Route>
-            <PrivateRoute exact path="/content" Component={Content}>
-              <Content favorites={favorites} setFavorites={setFavorites} />
-            </PrivateRoute>
-            <Route exact path="/content/:id">
-              <Single />
-            </Route>
-          </Switch>
-
-          <footer className="Footer">
-            <p className="Copyright">
-              We care about your entertainment. Copyright © 2019–2020 felix.com
-            </p>
-            <div className="Cards">
-              <ul>
-                <li>
-                  <a href="www.visa.com">
-                    <img className="Card" alt="Visa card logo" src={card}></img>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </footer>
-        </div>
+          </div>
+        </footer>
       </div>
-    </Provider>
+    </div>
   );
 };
 // export default withRouter(App);
