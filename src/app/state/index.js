@@ -1,7 +1,7 @@
 import { createStore, combineReducers } from "redux";
-import contentReducer from "../../content";
+import content from "../../content";
 
-const allReducers = combineReducers({ content: contentReducer });
+const allReducers = combineReducers({ content: content.reducer });
 
 // const store = createStore(
 //   contentReducer,

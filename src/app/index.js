@@ -6,8 +6,9 @@ import "./styles/scss/styles.scss";
 // -----------------------------image imports ---------------------------------------
 import logo from "./styles/images/F.svg";
 import card from "./styles/images/credit-card.svg";
-// -----------------------------React-redux/ state ----------------------------------
+// -----------------------------React-redux/ state / types----------------------------------
 import { connect } from "react-redux";
+// import content from "../../../content";
 // -----------------------------Components import ----------------------------------
 import Button from "./components/Button";
 import PrivateRoute from "./components/PrivateRoute";
@@ -42,7 +43,7 @@ const App = props => {
     } catch {
       console.log("woops somthin went wrong on logout");
     }
-  }, [props.history]);
+  }, [props]);
 
   return (
     <div className="App">
