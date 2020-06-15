@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "../index.css";
 import Movie from "../components/Movies";
+import { connect } from "react-redux";
+import content from "../../content";
 
-const Content = ({ favorites }) => {
+const Content = ({ favorites, setMovies }) => {
   // const [item, setItem] = useState([]);
-  const [items, setItems] = useState([]);
+  // const [items, setItems] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const getItems = useCallback(async () => {
@@ -20,10 +22,17 @@ const Content = ({ favorites }) => {
     );
 
     if (res.ok) {
-      setItems(await res.json());
+      // setItems(await res.json());
+      let json = await res.json();
+      // console.log(props);
+      setMovies(json);
+      // console.log(movies + "some");
+      // console.log(props.movies);
+      // setItems(props.movies);
     }
     setIsLoaded(true);
-  }, [setIsLoaded, setItems]);
+    // }, [setIsLoaded, setItems, props]);
+  }, [setIsLoaded, setMovies]);
 
   useEffect(() => {
     getItems();
@@ -32,7 +41,7 @@ const Content = ({ favorites }) => {
   return (
     <React.Fragment>
       <div className="Movies">
-        {!isLoaded ? (
+        {/* {!isLoaded ? (
           <h4 style={{ color: "white" }}> loading...</h4>
         ) : (
           items.map(item => (
@@ -48,10 +57,16 @@ const Content = ({ favorites }) => {
               {item.description}
             </Movie>
           ))
-        )}
+        )} */}
       </div>
     </React.Fragment>
   );
 };
 
-export default Content;
+function mapDispatchToProps(dispatch) {
+  return {
+    setMovies: movies => dispatch({ type: content.types.SET_MOVIES, movies })
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Content);

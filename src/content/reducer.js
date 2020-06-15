@@ -23,7 +23,7 @@ function contentReducer(state = DEFAULT_CONTET_STATE, action) {
       return { ...state, token: action.token };
     }
     case types.SET_MOVIES: {
-      console.log(action);
+      console.log(action, "stringas");
       return { ...state, movies: action.movies };
     }
     default:

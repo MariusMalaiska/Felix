@@ -11,3 +11,10 @@ export const toggleFavorite = (id, isFavorite) => {
 
   return { type: types.TOGGLE_FAVORITE, id };
 };
+
+export const setToken = token => {
+  return {
+    type: types.SET_TOKEN,
+    token
+  };
+};

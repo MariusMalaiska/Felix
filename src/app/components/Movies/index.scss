@@ -6,7 +6,13 @@
   width: 270px;
   min-height: 370px;
   margin: 48px 0px 48px 0px;
+
+  .Movie-link {
+    text-decoration: none;
+    color: var(--white);
+  }
 }
+
 .Movie-Image {
   min-height: 202px;
   width: 100%;
