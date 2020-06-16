@@ -6,8 +6,10 @@ import "./styles/scss/styles.scss";
 // -----------------------------image imports ---------------------------------------
 import logo from "./styles/images/F.svg";
 import card from "./styles/images/credit-card.svg";
-// -----------------------------React-redux/ state ----------------------------------
+// -----------------------------React-redux/ state / types----------------------------------
 import { connect } from "react-redux";
+import { compose, bindActionCreators } from "redux";
+import content from "../content";
 // -----------------------------Components import ----------------------------------
 import Button from "./components/Button";
 import PrivateRoute from "./components/PrivateRoute";
@@ -42,7 +44,7 @@ const App = props => {
     } catch {
       console.log("woops somthin went wrong on logout");
     }
-  }, [props.history]);
+  }, [props]);
 
   return (
     <div className="App">
@@ -103,7 +105,29 @@ const App = props => {
 };
 // export default withRouter(App);
 
-function mapDispatchToProps(dispatch) {
-  return { setToken: token => dispatch({ type: "SET_TOKEN", token }) };
-}
-export default connect(null, mapDispatchToProps)(withRouter(App));
+// function mapDispatchToProps(dispatch) {
+// return { setToken: token => dispatch({ type: "SET_TOKEN", token }) };
+// return {
+//   setToken: token => dispatch({ type: "SET_TOKEN", token })
+// setMovies: movies => dispatch({ type: "SET_MOVIES", movies })
+//   };
+// }
+// function mapDispatchToProps(dispatch) {
+//   return { setMovies: movies => dispatch({ type: "SET_MOVIES", movies }) };
+// }
+// export default connect(null, mapDispatchToProps)(withRouter(App));
+
+// dispatch => {
+//   return {
+//     toggleFavorite: bindActionCreators(content.actions.toggleFavorite, dispatch)
+//   };
+// };
+
+const enhance = compose(
+  withRouter,
+  connect(null, dispatch => {
+    return { setToken: bindActionCreators(content.actions.setToken, dispatch) };
+  })
+);
+
+export default enhance(App);

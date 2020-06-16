@@ -13,12 +13,14 @@ function Movie({ children, title, img, onClick, isfavorite, id }) {
   return (
     <div className={classes}>
       {/* onClick={openMovie(id)} */}
-      <div
-        className="Movie-Image"
-        style={{ backgroundImage: `url(${img})` }}
-      ></div>
+      <Link className="Movie-link" to={`/content/${id}`}>
+        <div
+          className="Movie-Image"
+          style={{ backgroundImage: `url(${img})` }}
+        ></div>
+      </Link>
       <div className="Movie-Info">
-        <Link to={`/content/${id}`}>
+        <Link className="Movie-link" to={`/content/${id}`}>
           <Title level="4">{title}</Title>
         </Link>
         <div className="module line-clamp">
