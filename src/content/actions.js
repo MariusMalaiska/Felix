@@ -18,3 +18,10 @@ export const setToken = token => {
     token
   };
 };
+
+export const setMovies = movies => {
+  return {
+    type: types.SET_MOVIES,
+    movies
+  };
+};

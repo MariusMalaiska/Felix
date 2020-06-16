@@ -2,9 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import "../index.css";
 import Movie from "../components/Movies";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import content from "../../content";
 
-const Content = ({ favorites, setMovies }) => {
+//({ favorites, setMovies, movies }) istraukia is props juose esancius itemus ->
+const Content = ({ favorites, setMovies, movies }) => {
   // const [item, setItem] = useState([]);
   // const [items, setItems] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -20,31 +22,26 @@ const Content = ({ favorites, setMovies }) => {
         }
       }
     );
-
     if (res.ok) {
-      // setItems(await res.json());
       let json = await res.json();
-      // console.log(props);
       setMovies(json);
-      // console.log(movies + "some");
-      // console.log(props.movies);
-      // setItems(props.movies);
     }
     setIsLoaded(true);
-    // }, [setIsLoaded, setItems, props]);
   }, [setIsLoaded, setMovies]);
 
   useEffect(() => {
     getItems();
   }, [getItems]);
 
+  console.log(movies, "content");
+
   return (
     <React.Fragment>
       <div className="Movies">
-        {/* {!isLoaded ? (
+        {!isLoaded ? (
           <h4 style={{ color: "white" }}> loading...</h4>
         ) : (
-          items.map(item => (
+          movies.map(item => (
             <Movie
               title={item.title}
               key={item.id}
@@ -57,16 +54,27 @@ const Content = ({ favorites, setMovies }) => {
               {item.description}
             </Movie>
           ))
-        )} */}
+        )}
       </div>
     </React.Fragment>
   );
 };
 
-function mapDispatchToProps(dispatch) {
+// mapDispatchToProps prokonectina movies prie esamo js failo->
+function mapStateToProps(state) {
   return {
-    setMovies: movies => dispatch({ type: content.types.SET_MOVIES, movies })
+    movies: content.selectors.movies(state)
   };
 }
 
-export default connect(null, mapDispatchToProps)(Content);
+// mapDispatchToProps perduoda setMovies i props->
+function mapDispatchToProps(dispatch) {
+  return {
+    // vietoje be actions creator sukuria funkciaja setMovies ->
+    // setMovies: movies => dispatch({ type: content.types.SET_MOVIES, movies })
+    // bindActionCreators prisega prie actions ->
+    setMovies: bindActionCreators(content.actions.setMovies, dispatch)
+  };
+}
+// connect prikonectina viada 1 mapStateToProps ir antra mapDispatchToProps
+export default connect(mapStateToProps, mapDispatchToProps)(Content);
