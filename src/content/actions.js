@@ -25,3 +25,32 @@ export const setMovies = movies => {
     movies
   };
 };
+
+// fetch action creator using redux-thunk middleware
+export const fetchMovies = ({ free } = {}, token) => {
+  return async dispatch => {
+    dispatch({ type: types.MOVIES_REQ });
+
+    const response = await fetch(
+      `https://academy-video-api.herokuapp.com/content/${
+        free ? "free-" : ""
+      }items`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: token
+        }
+      }
+    );
+    if (!response.ok) {
+      dispatch({
+        type: types.MOVIES_FAILURE,
+        payload: await response.json(),
+        error: "Oops, only free content"
+      });
+    } else {
+      dispatch({ type: types.MOVIES_SUCESS, payload: await response.json() });
+    }
+  };
+};

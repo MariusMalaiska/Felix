@@ -115,13 +115,15 @@ const enhance = compose(
     state => {
       return {
         token: auth.selectors.getAccessToken(state),
-        isAuthenticated: !!auth.selectors.getAccessToken(state)
+        isAuthenticated: !!auth.selectors.getAccessToken(state),
+        movies: content.selectors.movies(state)
       };
     },
     dispatch => {
       return {
         setToken: bindActionCreators(content.actions.setToken, dispatch),
-        logout: bindActionCreators(auth.actions.logout, dispatch)
+        logout: bindActionCreators(auth.actions.logout, dispatch),
+        setMovies: bindActionCreators(content.actions.setMovies, dispatch)
       };
     }
   )

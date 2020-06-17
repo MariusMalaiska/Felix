@@ -1,11 +1,20 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import Button from "../components/Button";
+import { connect } from "react-redux";
 import "../index.css";
 import Movie from "../components/Movies";
+import { bindActionCreators, compose } from "redux";
+import auth from "../../auth";
+import content from "../../content";
 
-const Home = ({ favorites, setFavorites }) => {
-  const [items, setItems] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+const Home = ({ favorites, setFavorites, fetchMovies, setMovies, movies }) => {
+  // const [items, setItems] = useState([]);
+
+  // const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    fetchMovies({ free: true });
+  }, [fetchMovies]);
 
   // const changeButton = useCallback(
   //   id => {
@@ -19,27 +28,27 @@ const Home = ({ favorites, setFavorites }) => {
   //   [favorites, setFavorites]
   // );
 
-  const freeItems = useCallback(
-    async e => {
-      const res = await fetch(
-        `https://academy-video-api.herokuapp.com/content/free-items`,
-        {
-          method: "GET"
-        }
-      );
+  // const freeItems = useCallback(
+  //   async e => {
+  //     const res = await fetch(
+  //       `https://academy-video-api.herokuapp.com/content/free-items`,
+  //       {
+  //         method: "GET"
+  //       }
+  //     );
 
-      if (res.ok) {
-        setItems(await res.json());
-      }
-      setIsLoaded(true);
-    },
-    [setIsLoaded, setItems]
-  );
+  //     if (res.ok) {
+  //       setItems(await res.json());
+  //     }
+  //     setIsLoaded(true);
+  //   },
+  //   [setIsLoaded, setItems]
+  // );
 
-  useEffect(() => {
-    freeItems();
-  }, [freeItems]);
-
+  // useEffect(() => {
+  //   freeItems();
+  // }, [freeItems]);
+  console.log(movies, "sitas ");
   return (
     <React.Fragment>
       <div className="Hero">
@@ -50,10 +59,11 @@ const Home = ({ favorites, setFavorites }) => {
       </div>
       <div className="Gray-line" />
       <div className="Movies">
-        {!isLoaded ? (
+        {/* {!isLoaded ? (
           <h4 style={{ color: "white" }}> loading...</h4>
-        ) : (
-          items.map(item => (
+        ) : ( */}
+        {movies.map(
+          item => (
             <Movie
               title={item.title}
               key={item.id}
@@ -65,7 +75,7 @@ const Home = ({ favorites, setFavorites }) => {
             >
               {item.description}
             </Movie>
-          ))
+          ) /* ) */
         )}
       </div>
       <div className="Content-btn">
@@ -76,4 +86,23 @@ const Home = ({ favorites, setFavorites }) => {
   );
 };
 
-export default Home;
+// export default Home;
+
+const enhance = compose(
+  connect(
+    state => {
+      return {
+        token: auth.selectors.getAccessToken(state),
+        movies: content.selectors.movies(state)
+      };
+    },
+    dispatch => {
+      return {
+        setMovies: bindActionCreators(content.actions.setMovies, dispatch),
+        fetchMovies: bindActionCreators(content.actions.fetchMovies, dispatch)
+      };
+    }
+  )
+);
+
+export default enhance(Home);

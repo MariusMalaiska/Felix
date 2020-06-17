@@ -3,7 +3,7 @@ import * as types from "./types";
 const DEFAULT_CONTET_STATE = {
   favorites: [],
   token: localStorage.getItem("token"),
-  movies: []
+  movies: { loading: false, data: [], error: null }
 };
 
 function contentReducer(state = DEFAULT_CONTET_STATE, action) {
@@ -26,6 +26,25 @@ function contentReducer(state = DEFAULT_CONTET_STATE, action) {
       console.log(action, "stringas");
       return { ...state, movies: action.movies };
     }
+    // -----------------------------
+    case types.MOVIES_REQ:
+      return { ...state, movies: { ...state.movies, loading: true } };
+    case types.MOVIES_FAILURE:
+      return {
+        ...state,
+        movies: {
+          ...state.movies,
+          loading: false,
+          data: action.payload,
+          error: action.error
+        }
+      };
+    case types.MOVIES_SUCESS:
+      return {
+        ...state,
+        movies: { ...state.movies, loading: false, data: action.payload }
+      };
+
     default:
       return state;
   }
