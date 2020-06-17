@@ -1,12 +1,16 @@
 import React from "react";
 import { Route, Redirect, useLocation } from "react-router-dom";
+import { connect } from "react-redux";
+import auth from "../../../auth";
 
-function PrivateRoute(props) {
-  const token = window.localStorage.getItem("token");
+function PrivateRoute({ isAuthenticated, ...props }) {
+  // const token = window.localStorage.getItem("token");
+  // const token = window.localStorage.getItem("token");
   const location = useLocation();
 
-  if (token) {
-    console.log("Proceed");
+  console.log(isAuthenticated);
+
+  if (isAuthenticated) {
     return <Route {...props} />;
   }
 
@@ -17,4 +21,10 @@ function PrivateRoute(props) {
   );
 }
 
-export default PrivateRoute;
+const enhance = connect(state => {
+  return {
+    isAuthenticated: !!auth.selectors.getAccessToken(state)
+  };
+});
+
+export default enhance(PrivateRoute);

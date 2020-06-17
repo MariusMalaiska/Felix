@@ -1,5 +1,5 @@
 // -----------------------Frame works, Library, Css/Scss imports --------------------
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import "./index.css";
 import "./styles/scss/styles.scss";
@@ -10,6 +10,7 @@ import card from "./styles/images/credit-card.svg";
 import { connect } from "react-redux";
 import { compose, bindActionCreators } from "redux";
 import content from "../content";
+import auth from "../auth";
 // -----------------------------Components import ----------------------------------
 import Button from "./components/Button";
 import PrivateRoute from "./components/PrivateRoute";
@@ -19,33 +20,37 @@ import Login from "./pages/Login";
 import Content from "./pages/Content";
 import Single from "./pages/Single";
 
-const App = props => {
+// const App = props => {
+const App = ({ logout, token, isAuthenticated }) => {
   const [favorites, setFavorites] = useState([]);
 
-  const logout = useCallback(async () => {
-    try {
-      const result = await fetch(
-        "https://academy-video-api.herokuapp.com/auth/logout",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ token: localStorage.getItem("token") })
-        }
-      );
-      if (!result.ok) {
-        throw result.json();
-      }
-      console.log(result);
-      localStorage.clear();
-      props.setToken("");
-      props.history.replace("/");
-    } catch {
-      console.log("woops somthin went wrong on logout");
-    }
-  }, [props]);
-
+  const signOut = e => {
+    logout(token);
+  };
+  // const logout = useCallback(async () => {
+  //   try {
+  //     const result = await fetch(
+  //       "https://academy-video-api.herokuapp.com/auth/logout",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json"
+  //         },
+  //         body: JSON.stringify({ token: localStorage.getItem("token") })
+  //       }
+  //     );
+  //     if (!result.ok) {
+  //       throw result.json();
+  //     }
+  //     console.log(result);
+  //     localStorage.clear();
+  //     props.setToken("");
+  //     props.history.replace("/");
+  //   } catch {
+  //     console.log("woops somthin went wrong on logout");
+  //   }
+  // }, [props]);
+  // console.log(props.isAuthenticated, "isAuthenticated");
   return (
     <div className="App">
       <div className="Container">
@@ -57,12 +62,12 @@ const App = props => {
               </Link>
             </li>
             <li>
-              {localStorage.token === undefined ? (
+              {isAuthenticated === false ? (
                 <Button to="/login" size="small">
                   Sign in
                 </Button>
               ) : (
-                <Button onClick={logout} size="small">
+                <Button onClick={signOut} size="small">
                   Logout
                 </Button>
               )}
@@ -103,31 +108,23 @@ const App = props => {
     </div>
   );
 };
-// export default withRouter(App);
-
-// function mapDispatchToProps(dispatch) {
-// return { setToken: token => dispatch({ type: "SET_TOKEN", token }) };
-// return {
-//   setToken: token => dispatch({ type: "SET_TOKEN", token })
-// setMovies: movies => dispatch({ type: "SET_MOVIES", movies })
-//   };
-// }
-// function mapDispatchToProps(dispatch) {
-//   return { setMovies: movies => dispatch({ type: "SET_MOVIES", movies }) };
-// }
-// export default connect(null, mapDispatchToProps)(withRouter(App));
-
-// dispatch => {
-//   return {
-//     toggleFavorite: bindActionCreators(content.actions.toggleFavorite, dispatch)
-//   };
-// };
 
 const enhance = compose(
   withRouter,
-  connect(null, dispatch => {
-    return { setToken: bindActionCreators(content.actions.setToken, dispatch) };
-  })
+  connect(
+    state => {
+      return {
+        token: auth.selectors.getAccessToken(state),
+        isAuthenticated: !!auth.selectors.getAccessToken(state)
+      };
+    },
+    dispatch => {
+      return {
+        setToken: bindActionCreators(content.actions.setToken, dispatch),
+        logout: bindActionCreators(auth.actions.logout, dispatch)
+      };
+    }
+  )
 );
 
 export default enhance(App);
