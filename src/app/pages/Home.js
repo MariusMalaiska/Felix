@@ -48,7 +48,7 @@ const Home = ({ favorites, setFavorites, fetchMovies, setMovies, movies }) => {
   // useEffect(() => {
   //   freeItems();
   // }, [freeItems]);
-  console.log(movies, "sitas ");
+  // console.log(movies, "sitas ");
   return (
     <React.Fragment>
       <div className="Hero">
